@@ -1,0 +1,12 @@
+{
+  "name": "neural-captcha-buster",
+  "description": "An AWS Lambda for guessing CAPTCHAs using a deep neural network written in Python",
+  "version": "0.1.0",
+  "repository": "git@github.com:joelove/neural-captcha-buster.git",
+  "author": "Joe Love <git@joelove.uk>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "serverless": "^1.38.0"
+  }
+}

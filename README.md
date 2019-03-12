@@ -1,4 +1,5 @@
 # Neural CAPTCHA buster
+## An AWS Lambda for guessing CAPTCHAs using a deep neural network written in Python
 
 ### Prerequisites
 
