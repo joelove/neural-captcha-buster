@@ -2,9 +2,12 @@ import cv2.cv2 as cv2
 import numpy as np
 import os
 import sys
+import base64
+from io import StringIO
 from functools import reduce
 from operator import itemgetter
 from PIL import Image
+
 
 
 EXPECTED_MAX_CHARS = 7
@@ -81,12 +84,19 @@ def box_width(box):
     return box[1][0] - box[0][0]
 
 
-def read(buffer):
-    image = cv2.imdecode(buffer, 1)
-    pixels, boxes = get_letter_bounding_boxes(image)
-    img_rgb = cv2.cvtColor(pixels, cv2.COLOR_GRAY2RGB)
-    cv2.drawContours(img_rgb, np.array(boxes, np.int32), -1, (255, 0, 0))
-    return img_rgb
+def readb64(base64_string):
+    sbuf = StringIO()
+    sbuf.write(base64.b64decode(base64_string))
+    pimg = Image.open(sbuf)
+    return cv2.cvtColor(np.array(pimg), cv2.COLOR_GRAY2RGB)
+
+
+def read(image_string):
+    image_buffer = readb64(image_string)
+    pixels, boxes = get_letter_bounding_boxes(image_buffer)
+    image = cv2.cvtColor(pixels, cv2.COLOR_GRAY2RGB)
+    cv2.drawContours(image, np.array(boxes, np.int32), -1, (255, 0, 0))
+    return image
 
 
 if __name__ == '__main__':

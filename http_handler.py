@@ -6,12 +6,11 @@ import character_segmenter
 
 
 def read(event, context):
-    image_array = numpy.fromstring(event["image"], numpy.uint8)
-    image_buffer = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-    images_segments = character_segmenter.read(image_buffer)
+    image_string = event["image"]
+    characters = character_segmenter.read(image_string)
 
     body = {
-        "image": images_segments
+        "image": characters
     }
 
     response = {
