@@ -1,11 +1,12 @@
 import cv2.cv2 as cv2
 import numpy as np
-import os
 import sys
+import base64
+
 from functools import reduce
 from operator import itemgetter
 from PIL import Image
-
+from io import BytesIO
 
 
 EXPECTED_MAX_CHARS = 7
@@ -15,9 +16,19 @@ def debug(*objs):
     print(*objs, file=sys.stderr)
 
 
-def get_letter_images(rgb_image):
+def decode_base64(base64_string):
+    return Image.open(BytesIO(base64.b64decode(base64_string)))
+
+
+def convert_to_rgb(image):
+    return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+
+
+def get_letter_images(base64_image):
+    raw_image = decode_base64(base64_image)
+    rgb_image = convert_to_rgb(raw_image)
     boxes = get_letter_bounding_boxes(rgb_image)
-    raw_image = Image.fromarray(rgb_image)
+    # raw_image = Image.fromarray(rgb_image)
 
     def crop_letter(box):
         return raw_image.crop(
