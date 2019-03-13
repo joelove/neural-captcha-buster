@@ -8,11 +8,11 @@ from PIL import Image
 import character_segmenter
 
 
-def train_from_folder(src_directory='solved_captchas', target_directory='training_images'):
+def build_training_images(src_directory='solved_captchas', target_directory='training_images'):
     start_time = time.time()
     files = glob.glob(src_directory + "/*.jpg")
 
-    print(f'Creating letter images from {len(files)} files')
+    print(f'Creating training images from {len(files)} files')
 
     for _, filename in enumerate(files):
         image = Image.fromarray(cv2.imread(filename))
@@ -38,4 +38,4 @@ def train_from_folder(src_directory='solved_captchas', target_directory='trainin
 
 
 if __name__ == '__main__':
-    train_from_folder()
+    build_training_images()

@@ -2,6 +2,7 @@ import cv2.cv2 as cv2
 import numpy as np
 import sys
 
+from PIL import Image
 from functools import reduce
 from operator import itemgetter
 
@@ -14,15 +15,29 @@ def convert_to_rgb(image):
     return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
 
 
+def pad_and_resize_letter(image):
+    desired_size = 48
+    old_size = image.size
+    ratio = float(desired_size)/max(old_size)
+    new_size = tuple([int(x*ratio) for x in old_size])
+    resized_image = image.resize(new_size, Image.ANTIALIAS)
+    new_image = Image.new("RGB", (desired_size, desired_size))
+    new_image.paste(resized_image, ((desired_size-new_size[0])//2, (desired_size-new_size[1])//2))
+
+    return new_image
+
+
 def get_letter_images(raw_image, EXPECTED_LENGTH =7):
 
     def crop_letter(box):
-        return raw_image.crop(
+        cropped_image = raw_image.crop(
             box=(
                 box[3][0]+1,
                 box[3][1]+1,
                 box[1][0],
                 box[1][1]))
+
+        return pad_and_resize_letter(cropped_image)
 
     rgb_image = convert_to_rgb(raw_image)
     boxes = get_letter_bounding_boxes(rgb_image, EXPECTED_LENGTH)

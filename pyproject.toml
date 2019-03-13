@@ -10,6 +10,7 @@ numpy = "^1.16"
 opencv-python = "^4.0"
 Pillow = "^5.4"
 keras = "^2.2"
+tensorflow = "^1.13"
 
 [build-system]
 requires = ["poetry>=0.12"]
