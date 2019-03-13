@@ -8,7 +8,7 @@ from PIL import Image
 
 
 
-EXPECTED_MAX_CHARS = 7
+EXPECTED_MAX_CHARS = 4
 
 
 def debug(*objs):
@@ -16,17 +16,14 @@ def debug(*objs):
 
 
 def get_letter_bounding_boxes(image):
-    imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    imgray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     _, thresh = cv2.threshold(imgray, 127, 255, 0)
-    pixels, contours, _ = cv2.findContours(
-        thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
+    contours = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     bbs = bounding_boxes(flatten_innermost(contours[1:]))
     merged = merge_vertical_overlaps(bbs)
     while len(merged) > EXPECTED_MAX_CHARS:
         merged = merge_two_thinnest_adjacent_boxes(merged)
-
-    return pixels, merged
+    return merged
 
 
 def flatten_innermost(contours):
@@ -80,10 +77,3 @@ def merge_two_thinnest_adjacent_boxes(boxes):
 
 def box_width(box):
     return box[1][0] - box[0][0]
-
-
-def read(image_buffer):
-    pixels, boxes = get_letter_bounding_boxes(image_buffer)
-    cv2.drawContours(pixels, np.array(boxes, np.int32), -1, (255, 0, 0))
-    image = Image.fromarray(pixels)
-    return image
