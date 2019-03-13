@@ -8,21 +8,40 @@ from PIL import Image
 
 
 
-EXPECTED_MAX_CHARS = 4
+EXPECTED_MAX_CHARS = 7
 
 
 def debug(*objs):
     print(*objs, file=sys.stderr)
 
 
+def get_letter_images(rgb_image):
+    boxes = get_letter_bounding_boxes(rgb_image)
+    raw_image = Image.fromarray(rgb_image)
+
+    def crop_letter(box):
+        return raw_image.crop(
+            box=(
+                box[3][0]+1,
+                box[3][1]+1,
+                box[1][0],
+                box[1][1]))
+
+    letters = list(map(crop_letter, boxes))
+
+    return letters;
+
+
 def get_letter_bounding_boxes(image):
     imgray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     _, thresh = cv2.threshold(imgray, 127, 255, 0)
-    contours = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    [contours, _] = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     bbs = bounding_boxes(flatten_innermost(contours[1:]))
     merged = merge_vertical_overlaps(bbs)
+
     while len(merged) > EXPECTED_MAX_CHARS:
         merged = merge_two_thinnest_adjacent_boxes(merged)
+
     return merged
 
 
