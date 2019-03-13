@@ -21,10 +21,17 @@ def read(event, context):
     base64_image = event["image"]
     raw_image = read_base64(base64_image)
     rgb_image = convert_to_rgb(raw_image)
-    characters = character_segmenter.get_letter_bounding_boxes(rgb_image)
+    bounding_boxes = character_segmenter.get_letter_bounding_boxes(rgb_image)
+
+    # Test the output
+    contours = np.array(bounding_boxes, np.int32)
+    test_rgb_image = rgb_image.copy()
+    cv2.drawContours(test_rgb_image, contours, -1, (255, 0, 0))
+    test_raw_image = Image.fromarray(test_rgb_image)
+    test_raw_image.show()
 
     body = {
-        "image": characters
+        "image": "foo"
     }
 
     response = {
