@@ -1,34 +1,20 @@
 import cv2.cv2 as cv2
 import numpy as np
 import sys
-import base64
 
 from functools import reduce
 from operator import itemgetter
-from PIL import Image
-from io import BytesIO
-
-
-EXPECTED_MAX_CHARS = 7
 
 
 def debug(*objs):
     print(*objs, file=sys.stderr)
 
 
-def decode_base64(base64_string):
-    return Image.open(BytesIO(base64.b64decode(base64_string)))
-
-
 def convert_to_rgb(image):
     return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
 
 
-def get_letter_images(base64_image):
-    raw_image = decode_base64(base64_image)
-    rgb_image = convert_to_rgb(raw_image)
-    boxes = get_letter_bounding_boxes(rgb_image)
-    # raw_image = Image.fromarray(rgb_image)
+def get_letter_images(raw_image, EXPECTED_LENGTH =7):
 
     def crop_letter(box):
         return raw_image.crop(
@@ -38,19 +24,21 @@ def get_letter_images(base64_image):
                 box[1][0],
                 box[1][1]))
 
+    rgb_image = convert_to_rgb(raw_image)
+    boxes = get_letter_bounding_boxes(rgb_image, EXPECTED_LENGTH)
     letters = list(map(crop_letter, boxes))
 
     return letters;
 
 
-def get_letter_bounding_boxes(image):
+def get_letter_bounding_boxes(image, EXPECTED_LENGTH):
     imgray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     _, thresh = cv2.threshold(imgray, 127, 255, 0)
     [contours, _] = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     bbs = bounding_boxes(flatten_innermost(contours[1:]))
     merged = merge_vertical_overlaps(bbs)
 
-    while len(merged) > EXPECTED_MAX_CHARS:
+    while len(merged) > EXPECTED_LENGTH:
         merged = merge_two_thinnest_adjacent_boxes(merged)
 
     return merged
@@ -101,7 +89,6 @@ def merge_two_thinnest_adjacent_boxes(boxes):
     widths = list(map(box_width, boxes))
     adjacent_sums = [x + y for x, y in zip(widths, widths[1:] + [0])][:-1]
     first_index = min(enumerate(adjacent_sums), key=itemgetter(1))[0]
-    debug(widths, adjacent_sums, first_index)
     return boxes[:first_index] + [bounding_box(boxes[first_index] + boxes[first_index+1])] + boxes[first_index+2:]
 
 
