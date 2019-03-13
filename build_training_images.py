@@ -22,6 +22,10 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
         letters = list(captcha_text)
         letter_images = character_segmenter.get_letter_images(image, captcha_length)
 
+        if letter_images is None:
+            print(f'Dropping image: {captcha_text}')
+            break
+
         for i, image in enumerate(letter_images):
             letter = letters[i]
             directory = f'{target_directory}/{letter}'

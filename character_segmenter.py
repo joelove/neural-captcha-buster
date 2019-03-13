@@ -27,23 +27,27 @@ def pad_and_resize_letter(image):
     return new_image
 
 
-def get_letter_images(raw_image, EXPECTED_LENGTH =7):
-
-    def crop_letter(box):
-        cropped_image = raw_image.crop(
-            box=(
-                box[3][0]+1,
-                box[3][1]+1,
-                box[1][0],
-                box[1][1]))
-
-        return pad_and_resize_letter(cropped_image)
-
+def get_letter_images(raw_image, EXPECTED_LENGTH=7):
     rgb_image = convert_to_rgb(raw_image)
     boxes = get_letter_bounding_boxes(rgb_image, EXPECTED_LENGTH)
+
+    def crop_letter(box):
+        return raw_image.crop(box=(box[3][0]+1, box[3][1]+1, box[1][0], box[1][1]))
+
     letters = list(map(crop_letter, boxes))
 
-    return letters;
+    def get_max_letter_size(image):
+        return max(image.size)
+
+    def get_min_letter_size(letters):
+        return min(list(map(get_max_letter_size, letters)))
+
+    if not get_min_letter_size(letters):
+        return None
+
+    resized_letters = list(map(pad_and_resize_letter, letters))
+
+    return resized_letters;
 
 
 def get_letter_bounding_boxes(image, EXPECTED_LENGTH):
