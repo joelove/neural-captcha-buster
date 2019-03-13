@@ -8,7 +8,7 @@ from PIL import Image
 import character_segmenter
 
 
-def train_from_folder(src_directory='training_images', target_directory='letter_images'):
+def train_from_folder(src_directory='solved_captchas', target_directory='training_images'):
     start_time = time.time()
     files = glob.glob(src_directory + "/*.jpg")
 
