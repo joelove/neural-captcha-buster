@@ -23,9 +23,11 @@ def train_from_folder(src_directory='training_images', target_directory='letter_
         letter_images = character_segmenter.get_letter_images(image, captcha_length)
 
         for i, image in enumerate(letter_images):
-            path = f'{target_directory}/{letters[i]}/{time.time()}.png';
-            # os.makedirs(os.path.dirname(path), exist_ok=True)
+            letter = letters[i]
+            directory = f'{target_directory}/{letter}'
+            path = f'{directory}/{time.time()}.png';
             try:
+                os.makedirs(directory, exist_ok=True)
                 image.save(path)
             except:
                 pass
