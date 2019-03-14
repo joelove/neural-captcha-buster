@@ -2,14 +2,13 @@ import glob
 import cv2
 import os
 import time
-import numpy as np
 
 from PIL import Image
 
 import character_segmenter
 
 
-def build_training_images(src_directory='solved_captchas', target_directory='training_images'):
+def build_training_images(src_directory="solved_captchas", target_directory="training_images"):
     start_time = time.time()
     files = glob.glob(src_directory + "/*.jpg")
 
@@ -23,7 +22,7 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
             continue
 
         raw_image = Image.fromarray(image_array)
-        captcha_text = filename.split('.')[-2].split('_')[-1]
+        captcha_text = filename.split(".")[-2].split("_")[-1]
 
         captcha_length = len(captcha_text)
         letters = list(captcha_text)
@@ -47,5 +46,5 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
     print(f'Completed {len(files)} files in {time.time() - start_time} seconds!')
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     build_training_images()

@@ -15,10 +15,10 @@ def read_captcha(event, context):
     raw_image = Image.open(BytesIO(base64.b64decode(base64_image)))
     letter_images = character_segmenter.get_letter_images(raw_image)
     letter_characters = character_analyser.read_characters(letter_images)
-    letters = reduce(operator.add, letter_characters)
+    result = reduce(operator.add, letter_characters)
 
     body = {
-        "result": letters
+        "result": result
     }
 
     response = {
