@@ -7,10 +7,6 @@ from functools import reduce
 from operator import itemgetter
 
 
-def debug(*objs):
-    print(*objs, file=sys.stderr)
-
-
 def pad_and_resize_letter(image):
     desired_size = 48
     old_size = image.size
@@ -18,9 +14,9 @@ def pad_and_resize_letter(image):
     new_size = tuple([int(x * ratio) for x in old_size])
     resized_image = image.resize(new_size, Image.ANTIALIAS)
     new_image = Image.new("RGB", (desired_size, desired_size), (255, 255, 255))
-    desired_height = (desired_size - new_size[0]) // 2
-    desired_width = (desired_size - new_size[1]) // 2
-    new_image.paste(resized_image, (desired_height, desired_width))
+    x_offset = (desired_size - new_size[0]) // 2
+    y_offset = (desired_size - new_size[1]) // 2
+    new_image.paste(resized_image, (x_offset, y_offset))
 
     return new_image
 
@@ -45,7 +41,7 @@ def get_letter_images(raw_image, expected_length=8):
 
     resized_letters = list(map(pad_and_resize_letter, letters))
 
-    return resized_letters;
+    return resized_letters
 
 
 def get_letter_bounding_boxes(image, expected_length):

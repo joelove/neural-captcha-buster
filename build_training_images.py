@@ -20,7 +20,7 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
 
         if not (min(image_array.shape[0:2])):
             print(f'Dropping bad input image: {filename}')
-            continue;
+            continue
 
         raw_image = Image.fromarray(image_array)
         captcha_text = filename.split('.')[-2].split('_')[-1]
@@ -36,7 +36,7 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
         for i, image in enumerate(letter_images):
             letter = letters[i]
             directory = f'{target_directory}/{letter}'
-            path = f'{directory}/{time.time()}.png';
+            path = f'{directory}/{time.time()}.png'
             try:
                 os.makedirs(directory, exist_ok=True)
                 image.save(path)
@@ -44,9 +44,7 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
                 print(f'Failed to save image: {path}')
                 pass
 
-    end_time = time.time()
-
-    print(f'Completed {len(files)} files in {end_time - start_time} seconds!')
+    print(f'Completed {len(files)} files in {time.time() - start_time} seconds!')
 
 
 if __name__ == '__main__':

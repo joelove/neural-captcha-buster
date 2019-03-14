@@ -1,9 +1,6 @@
 from keras.models import model_from_json
 
 
-loaded_model = None
-
-
 def load_model():
     json_file = open('model.json', 'r')
     loaded_model_json = json_file.read()
@@ -12,15 +9,14 @@ def load_model():
     loaded_model = model_from_json(loaded_model_json)
     loaded_model.load_weights("model.h5")
 
-    print("Loaded model from disk!")
-
-
-def read_character(letter_image):
-    return loaded_model.predict(letter_image)
+    return loaded_model
 
 
 def read_characters(letter_images):
-    load_model()
+    model = load_model()
+
+    def read_character(letter_image):
+        return model.predict(letter_image)
 
     characters = list(map(read_character, letter_images))
 

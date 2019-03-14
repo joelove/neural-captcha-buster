@@ -45,14 +45,12 @@ def train_model(src_directory='training_images'):
     Y_train = []
     image_directories = glob.glob(src_directory + "/*")
 
-
-
     for _, directory in enumerate(image_directories):
         image_files = glob.glob(directory + "/*.png")
 
         letter = directory.split('/')[-1]
-        letter_vector = np.zeros(26);
-        letter_vector[ord(letter) - ord('a')] = 1;
+        letter_vector = np.zeros(26)
+        letter_vector[ord(letter) - ord('a')] = 1
         letter_images = []
 
         for _, filename in enumerate(image_files):

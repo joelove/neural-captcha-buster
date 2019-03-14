@@ -10,13 +10,9 @@ import character_segmenter
 import character_analyser
 
 
-def decode_base64(base64_string):
-    return Image.open(BytesIO(base64.b64decode(base64_string)))
-
-
-def read(event, context):
+def read_captcha(event, context):
     base64_image = event["image"]
-    raw_image = decode_base64(base64_image)
+    raw_image = Image.open(BytesIO(base64.b64decode(base64_image)))
     letter_images = character_segmenter.get_letter_images(raw_image)
     letter_characters = character_analyser.read_characters(letter_images)
     letters = reduce(operator.add, letter_characters)

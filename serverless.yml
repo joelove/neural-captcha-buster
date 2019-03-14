@@ -8,7 +8,7 @@ provider:
 
 functions:
   readCaptcha:
-    handler: http_handler.read
+    handler: handler.read_captcha
     events:
       - http:
           path: captcha/read
