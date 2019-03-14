@@ -14,21 +14,23 @@ def debug(*objs):
 def pad_and_resize_letter(image):
     desired_size = 48
     old_size = image.size
-    ratio = float(desired_size)/max(old_size)
-    new_size = tuple([int(x*ratio) for x in old_size])
+    ratio = float(desired_size) / max(old_size)
+    new_size = tuple([int(x * ratio) for x in old_size])
     resized_image = image.resize(new_size, Image.ANTIALIAS)
     new_image = Image.new("RGB", (desired_size, desired_size), (255, 255, 255))
-    new_image.paste(resized_image, ((desired_size-new_size[0])//2, (desired_size-new_size[1])//2))
+    desired_height = (desired_size - new_size[0]) // 2
+    desired_width = (desired_size - new_size[1]) // 2
+    new_image.paste(resized_image, (desired_height, desired_width))
 
     return new_image
 
 
-def get_letter_images(raw_image, EXPECTED_LENGTH=8):
+def get_letter_images(raw_image, expected_length=8):
     grayscale_image = cv2.cvtColor(np.array(raw_image), cv2.COLOR_BGR2GRAY)
-    boxes = get_letter_bounding_boxes(grayscale_image, EXPECTED_LENGTH)
+    boxes = get_letter_bounding_boxes(grayscale_image, expected_length)
 
     def crop_letter(box):
-        return raw_image.crop(box=(box[3][0]+1, box[3][1]+1, box[1][0], box[1][1]))
+        return raw_image.crop(box=(box[3][0] + 1, box[3][1] + 1, box[1][0], box[1][1]))
 
     letters = list(map(crop_letter, boxes))
 
@@ -46,13 +48,13 @@ def get_letter_images(raw_image, EXPECTED_LENGTH=8):
     return resized_letters;
 
 
-def get_letter_bounding_boxes(image, EXPECTED_LENGTH):
+def get_letter_bounding_boxes(image, expected_length):
     _, thresh = cv2.threshold(image, 127, 255, 0)
     [contours, _] = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     bbs = bounding_boxes(flatten_innermost(contours[1:]))
     merged = merge_vertical_overlaps(bbs)
 
-    while len(merged) > EXPECTED_LENGTH:
+    while len(merged) > expected_length:
         merged = merge_two_thinnest_adjacent_boxes(merged)
 
     return merged
