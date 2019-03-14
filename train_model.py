@@ -45,18 +45,23 @@ def train_model(src_directory='training_images'):
     Y_train = []
     image_directories = glob.glob(src_directory + "/*")
 
+
+
     for _, directory in enumerate(image_directories):
-        letter = directory.split('/')[-1]
         image_files = glob.glob(directory + "/*.png")
+
+        letter = directory.split('/')[-1]
+        letter_vector = np.zeros(26);
+        letter_vector[ord(letter) - ord('a')] = 1;
         letter_images = []
 
         for _, filename in enumerate(image_files):
-            image = cv2.imread(filename)
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            image = image.reshape(48, 48, 1)
+            letter_image = cv2.imread(filename)
+            letter_image = cv2.cvtColor(letter_image, cv2.COLOR_BGR2GRAY)
+            letter_image = letter_image.reshape(48, 48, 1)
 
-            X_train.append(image)
-            Y_train.append(letter)
+            X_train.append(letter_image)
+            Y_train.append(letter_vector)
 
     X_train = np.array(X_train)
     Y_train = np.array(Y_train)
