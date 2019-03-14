@@ -34,6 +34,7 @@ def build_training_images(src_directory='solved_captchas', target_directory='tra
                 os.makedirs(directory, exist_ok=True)
                 image.save(path)
             except:
+                print(f'Failed to save: {path}')
                 pass
 
     end_time = time.time()

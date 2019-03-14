@@ -21,13 +21,13 @@ def pad_and_resize_letter(image):
     ratio = float(desired_size)/max(old_size)
     new_size = tuple([int(x*ratio) for x in old_size])
     resized_image = image.resize(new_size, Image.ANTIALIAS)
-    new_image = Image.new("RGB", (desired_size, desired_size))
+    new_image = Image.new("RGB", (desired_size, desired_size), (255, 255, 255))
     new_image.paste(resized_image, ((desired_size-new_size[0])//2, (desired_size-new_size[1])//2))
 
     return new_image
 
 
-def get_letter_images(raw_image, EXPECTED_LENGTH=7):
+def get_letter_images(raw_image, EXPECTED_LENGTH=8):
     rgb_image = convert_to_rgb(raw_image)
     boxes = get_letter_bounding_boxes(rgb_image, EXPECTED_LENGTH)
 

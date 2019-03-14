@@ -8,6 +8,7 @@ from PIL import Image
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
+
 def save_model(model):
     model_json = model.to_json()
     with open("model.json", "w") as json_file:
@@ -48,6 +49,7 @@ def train_model(src_directory='training_images'):
                 image = cv2.imread(filename)
                 letter_images.append(image)
             except:
+                print(f'Failed to train with: {filename}')
                 pass
 
         x_train.append(np.array(letter_images))
