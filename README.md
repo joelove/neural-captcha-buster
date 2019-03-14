@@ -47,7 +47,9 @@ Firstly, we'll need a directory full of many, many solved captchas that looks li
 
 ```
 ├─ solved_captchas
+│ ├─ 60958917271_brarded.jpg
 │ ├─ 60957005257_dowties.jpg
+│ ├─ 60958918641_itsonia.jpg
 │ └─ 60958919248_clotler.jpg
 ```
 
@@ -64,9 +66,11 @@ Afterwards we should see the `training_images` directory fill up with individual
 ```
 ├─ training_images
 │ ├─ a
+│ │ ├─ 1552589077.315438.png
 │ │ ├─ 1552589077.367729.png
 │ │ └─ 1552589077.403722.png
 │ ├─ b
+│ │ ├─ 1552589077.662636.png
 │ │ ├─ 1552589077.663386.png
 │ │ └─ 1552589077.688153.png
 ```
