@@ -5,7 +5,7 @@ from keras.models import model_from_json
 
 
 def load_model():
-    json_file = open('model.json', 'r')
+    json_file = open("model.json", "r")
     loaded_model_json = json_file.read()
     json_file.close()
 
@@ -21,9 +21,13 @@ def read_characters(letter_images):
     def read_character(letter_image):
         letter_image = np.array(letter_image)
         letter_image = cv2.cvtColor(letter_image, cv2.COLOR_BGR2GRAY)
-        letter_image = letter_image.reshape(48, 48, 1)
+        letter_image = letter_image.reshape((1,) + letter_image.shape + (1,))
 
-        return model.predict(letter_image)
+        prediction = model.predict(letter_image)
+
+        print(prediction)
+
+        return "a"
 
     characters = list(map(read_character, letter_images))
 
