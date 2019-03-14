@@ -11,10 +11,6 @@ def debug(*objs):
     print(*objs, file=sys.stderr)
 
 
-def convert_to_rgb(image):
-    return cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
-
-
 def pad_and_resize_letter(image):
     desired_size = 48
     old_size = image.size
@@ -28,8 +24,8 @@ def pad_and_resize_letter(image):
 
 
 def get_letter_images(raw_image, EXPECTED_LENGTH=8):
-    rgb_image = convert_to_rgb(raw_image)
-    boxes = get_letter_bounding_boxes(rgb_image, EXPECTED_LENGTH)
+    grayscale_image = cv2.cvtColor(np.array(raw_image), cv2.COLOR_BGR2GRAY)
+    boxes = get_letter_bounding_boxes(grayscale_image, EXPECTED_LENGTH)
 
     def crop_letter(box):
         return raw_image.crop(box=(box[3][0]+1, box[3][1]+1, box[1][0], box[1][1]))
@@ -51,8 +47,7 @@ def get_letter_images(raw_image, EXPECTED_LENGTH=8):
 
 
 def get_letter_bounding_boxes(image, EXPECTED_LENGTH):
-    imgray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    _, thresh = cv2.threshold(imgray, 127, 255, 0)
+    _, thresh = cv2.threshold(image, 127, 255, 0)
     [contours, _] = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     bbs = bounding_boxes(flatten_innermost(contours[1:]))
     merged = merge_vertical_overlaps(bbs)
