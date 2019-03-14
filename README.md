@@ -83,6 +83,13 @@ Once we have some training images we can build and train a model by running our 
 poetry run python train_model.py
 ```
 
+That will create a model and some weightings in the root directory:
+
+```
+├─ model.json
+├─ model.h5
+```
+
 ### Testing the service
 
 Assuming the training went well, we can test out the AWS Lambda using `serverless`:
