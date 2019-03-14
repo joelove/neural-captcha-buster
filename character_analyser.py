@@ -1,3 +1,6 @@
+import cv2
+import numpy as np
+
 from keras.models import model_from_json
 
 
@@ -16,6 +19,10 @@ def read_characters(letter_images):
     model = load_model()
 
     def read_character(letter_image):
+        letter_image = np.array(letter_image)
+        letter_image = cv2.cvtColor(letter_image, cv2.COLOR_BGR2GRAY)
+        letter_image = letter_image.reshape(48, 48, 1)
+
         return model.predict(letter_image)
 
     characters = list(map(read_character, letter_images))
