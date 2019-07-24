@@ -1,9 +1,9 @@
+from cv2 import cv2
+from PIL import Image
+
 import glob
-import cv2
 import os
 import time
-
-from PIL import Image
 
 import character_segmenter
 

@@ -86,6 +86,7 @@ def merge_to_previous_if_overlap(merged, current_box):
         merged[-1] = bounding_box(merged[-1] + current_box)
     else:
         merged.append(current_box)
+
     return merged
 
 
@@ -94,6 +95,7 @@ def has_vertical_overlap(bounding_box1, bounding_box2):
     x_max1 = bounding_box1[1][0]
     x_min2 = bounding_box2[0][0]
     x_max2 = bounding_box2[1][0]
+
     return max(x_min1, x_min2) < min(x_max1, x_max2)
 
 
@@ -101,6 +103,7 @@ def merge_two_thinnest_adjacent_boxes(boxes):
     widths = list(map(box_width, boxes))
     adjacent_sums = [x + y for x, y in zip(widths, widths[1:] + [0])][:-1]
     first_index = min(enumerate(adjacent_sums), key=itemgetter(1))[0]
+
     return boxes[:first_index] + [bounding_box(boxes[first_index] + boxes[first_index+1])] + boxes[first_index+2:]
 
 

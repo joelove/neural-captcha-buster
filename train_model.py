@@ -1,9 +1,9 @@
-import glob
-import cv2
-import numpy as np
-
+from cv2 import cv2
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+import glob
+import numpy as np
 
 
 def save_model(model):

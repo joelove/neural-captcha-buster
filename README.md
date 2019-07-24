@@ -27,10 +27,6 @@ This project uses [Poetry](https://poetry.eustace.io/docs/) to manage packages a
 curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
 ```
 
-#### [Direnv](https://direnv.net/) (Optional)
-
-[Direnv](https://direnv.net/) is just a local environment manager, it automatically loads environment variables from an `.envrc` file in to your local environment, making it easier to manage sensitive or environment-specific application configuration.  In this case we're using it to manage server keys and augment the PATH to avoid global dependencies.
-
 ### Configuring the development environment
 
 To make life simpler, we won't deal with our virtual environments manually. To automatically configure a new virtual environment and install the required dependencies, just use [Poetry](https://poetry.eustace.io/docs/):
